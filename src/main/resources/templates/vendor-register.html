@@ -7,7 +7,7 @@
 <body>
  <div align="center">
             <h1>Vendor Registration</h1>
-            <form th:object=${vendor}>
+            <form action="/vendor/register" method="post" th:object=${vendor}>
                 Name: <input type="text" th:field="*{name}" name="name"><span th:errors="*{name}"></span><br><br>
                 Email: <input type="text" th:field="*{email}" name="email"><span th:errors="*{email}"></span><br><br>
                 Mobile: <input type="number" th:field="*{mobile}" name="mobile"><span th:errors="*{mobile}"></span><br><br>
