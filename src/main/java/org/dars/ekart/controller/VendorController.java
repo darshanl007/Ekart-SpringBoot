@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -28,5 +30,16 @@ public class VendorController {
 	@PostMapping("/register")
 	public String vendorRegister(@Valid Vendor vendor, BindingResult result, HttpSession session) {
 		return vendorService.vendorRegister(vendor, result, session);
+	}
+
+	@GetMapping("/otp/{id}")
+	public String loadOtp(@PathVariable int id, ModelMap map) {
+		map.put("id", id);
+		return "vendor-otp.html";
+	}
+
+	@PostMapping("/otp")
+	public String verifyOtp(@RequestParam int id, @RequestParam int otp, HttpSession session) {
+		return vendorService.verifyOtp(id, otp, session);
 	}
 }

@@ -50,7 +50,20 @@ public class VendorService {
 			emailSender.send(vendor);
 			System.err.println(vendor.getOtp());
 			session.setAttribute("success", "Otp Sent Successfully");
+			return "redirect:/vendor/otp/" + vendor.getId();
+		}
+	}
+
+	public String verifyOtp(int id, int otp, HttpSession session) {
+		Vendor vendor = vendorRepository.findById(id).orElseThrow();
+		if (vendor.getOtp() == otp) {
+			vendor.setVerified(true);
+			vendorRepository.save(vendor);
+			session.setAttribute("success", "Vendor Account Created Successfully");
 			return "redirect:/";
+		} else {
+			session.setAttribute("failure", "OTP Missmatch");
+			return "redirect:/vendor/otp/" + vendor.getId();
 		}
 	}
 
