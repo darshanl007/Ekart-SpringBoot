@@ -1,12 +1,16 @@
 package org.dars.ekart.service;
 
+import java.util.Random;
+
 import org.dars.ekart.dto.Vendor;
+import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Service
@@ -15,12 +19,15 @@ public class VendorService {
 	@Autowired
 	VendorRepository vendorRepository;
 
+	@Autowired
+	EmailSender emailSender;
+
 	public String loadRegister(Vendor vendor, ModelMap map) {
 		map.put("vendor", vendor);
 		return "vendor-register.html";
 	}
 
-	public String vendorRegister(@Valid Vendor vendor, BindingResult result) {
+	public String vendorRegister(@Valid Vendor vendor, BindingResult result, HttpSession session) {
 
 		if (!vendor.getPassword().equals(vendor.getConfirmPassword()))
 			result.rejectValue("confirmPassword", "error.confirmPassword",
@@ -37,9 +44,13 @@ public class VendorService {
 		}
 
 		else {
-			vendor.setVerified(false);
+			int otp = new Random().nextInt(100000, 1000000);
+			vendor.setOtp(otp);
 			vendorRepository.save(vendor);
-			return "home.html";
+			emailSender.send(vendor);
+			System.err.println(vendor.getOtp());
+			session.setAttribute("success", "Otp Sent Successfully");
+			return "redirect:/";
 		}
 	}
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -25,7 +26,7 @@ public class VendorController {
 	}
 
 	@PostMapping("/register")
-	public String vendorRegister(@Valid Vendor vendor, BindingResult result) {
-		return vendorService.vendorRegister(vendor, result);
+	public String vendorRegister(@Valid Vendor vendor, BindingResult result, HttpSession session) {
+		return vendorService.vendorRegister(vendor, result, session);
 	}
 }

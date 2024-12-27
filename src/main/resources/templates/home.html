@@ -5,11 +5,18 @@
 <title>Home</title>
 </head>
 <body>
+	<div align="center">
 
-<div align="center">
-	<h1 align="center" style="color:green">Ekart Website</h1>
-	<a href=""><button>Login</button></a>
-	<a href="/vendor/register"><button>Register</button></a>
-</div>
+		<div>
+			<h3 style="color: green;" th:text="${session.success}"></h3>
+			<h3 style="color: red;" th:text="${session.failure}"></h3>
+			<th:block th:text="${@messageRemover.remove()}"></th:block>
+		</div>
+
+		<h1 align="center" style="color: green">Ekart Website</h1>
+		<a href=""><button>Login</button></a> <a href="/vendor/register">
+			<button>Register</button>
+		</a>
+	</div>
 </body>
 </html>
