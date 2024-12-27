@@ -3,6 +3,7 @@ package org.dars.ekart.service;
 import java.util.Random;
 
 import org.dars.ekart.dto.Vendor;
+import org.dars.ekart.helper.AES;
 import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class VendorService {
 		else {
 			int otp = new Random().nextInt(100000, 1000000);
 			vendor.setOtp(otp);
+			vendor.setPassword(AES.encrypt(vendor.getPassword()));
 			vendorRepository.save(vendor);
 			emailSender.send(vendor);
 			System.err.println(vendor.getOtp());
