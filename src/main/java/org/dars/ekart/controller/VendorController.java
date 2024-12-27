@@ -42,4 +42,9 @@ public class VendorController {
 	public String verifyOtp(@RequestParam int id, @RequestParam int otp, HttpSession session) {
 		return vendorService.verifyOtp(id, otp, session);
 	}
+
+	@GetMapping("/resend-otp/{id}")
+	public String resendOtp(@PathVariable int id, HttpSession session) {
+		return vendorService.resendOtp(id, session);
+	}
 }

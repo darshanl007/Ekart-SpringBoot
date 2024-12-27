@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -62,9 +63,20 @@ public class VendorService {
 			session.setAttribute("success", "Vendor Account Created Successfully");
 			return "redirect:/";
 		} else {
-			session.setAttribute("failure", "OTP Missmatch");
+			session.setAttribute("failure", "OTP Missmatch , Try Again");
 			return "redirect:/vendor/otp/" + vendor.getId();
 		}
+	}
+
+	public String resendOtp(int id, HttpSession session) {
+		Vendor vendor = vendorRepository.findById(id).orElseThrow();
+		vendor.setOtp(new Random().nextInt(100000, 1000000));
+		vendor.setVerified(false);
+		vendorRepository.save(vendor);
+		System.err.println(vendor.getOtp());
+		emailSender.send(vendor);
+		session.setAttribute("success", "OTP Resent Success");
+		return "redirect:/vendor/otp/" + vendor.getId();
 	}
 
 }
