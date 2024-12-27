@@ -47,4 +47,24 @@ public class VendorController {
 	public String resendOtp(@PathVariable int id, HttpSession session) {
 		return vendorService.resendOtp(id, session);
 	}
+
+	@GetMapping("/login")
+	public String loadLogin() {
+		return "vendor-login.html";
+	}
+
+	@PostMapping("/login")
+	public String login(@RequestParam String email, @RequestParam String password, HttpSession session) {
+		return vendorService.login(email, password, session);
+	}
+
+	@GetMapping("/home")
+	public String loadHome(HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			return "vendor-home.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
+		}
+	}
 }

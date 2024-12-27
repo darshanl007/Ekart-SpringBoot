@@ -81,4 +81,31 @@ public class VendorService {
 		return "redirect:/vendor/otp/" + vendor.getId();
 	}
 
+	public String login(String email, String password, HttpSession session) {
+		Vendor vendor = vendorRepository.findByEmail(email);
+		if (vendor == null) {
+			session.setAttribute("failure", "Invalid Email");
+			return "redirect:/vendor/login";
+		} else {
+			if (AES.decrypt(vendor.getPassword()).equals(password)) {
+				if (vendor.isVerified()) {
+					session.setAttribute("vendor", vendor);
+					session.setAttribute("success", "Login success");
+					return "redirect:/vendor/home";
+				} else {
+					int otp = new Random().nextInt(100000, 1000000);
+					vendor.setOtp(otp);
+					vendorRepository.save(vendor);
+					emailSender.send(vendor);
+					System.err.println(vendor.getOtp());
+					session.setAttribute("success", "Otp Sent Successfully, First Verify Email for Logging In");
+					return "redirect:/vendor/otp/" + vendor.getId();
+				}
+			} else {
+				session.setAttribute("failure", "Invalid Password");
+				return "redirect:/vendor/login";
+			}
+		}
+	}
+
 }
