@@ -2,15 +2,16 @@ package org.dars.ekart.service;
 
 import java.util.Random;
 
+import org.dars.ekart.dto.Product;
 import org.dars.ekart.dto.Vendor;
 import org.dars.ekart.helper.AES;
 import org.dars.ekart.helper.EmailSender;
+import org.dars.ekart.repository.ProductRepository;
 import org.dars.ekart.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,6 +21,9 @@ public class VendorService {
 
 	@Autowired
 	VendorRepository vendorRepository;
+
+	@Autowired
+	ProductRepository productRepository;
 
 	@Autowired
 	EmailSender emailSender;
@@ -90,7 +94,7 @@ public class VendorService {
 			if (AES.decrypt(vendor.getPassword()).equals(password)) {
 				if (vendor.isVerified()) {
 					session.setAttribute("vendor", vendor);
-					session.setAttribute("success", "Login success");
+					session.setAttribute("success", "Login Success");
 					return "redirect:/vendor/home";
 				} else {
 					int otp = new Random().nextInt(100000, 1000000);
@@ -105,6 +109,33 @@ public class VendorService {
 				session.setAttribute("failure", "Invalid Password");
 				return "redirect:/vendor/login";
 			}
+		}
+	}
+
+	public String loadAddProduct(Product product, HttpSession session, ModelMap map) {
+		if (session.getAttribute("vendor") != null) {
+			map.put("product", product);
+			return "add-product.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
+		}
+	}
+
+	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			if (result.hasErrors()) {
+				return "add-product.html";
+			} else {
+				Vendor vendor = (Vendor) session.getAttribute("vendor");
+				product.setVendor(vendor);
+				productRepository.save(product);
+				session.setAttribute("success", "Product Added Success");
+				return "redirect:/vendor/home";
+			}
+		} else {
+			session.setAttribute("faliure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
 		}
 	}
 

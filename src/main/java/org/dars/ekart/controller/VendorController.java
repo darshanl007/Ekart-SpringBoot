@@ -1,5 +1,6 @@
 package org.dars.ekart.controller;
 
+import org.dars.ekart.dto.Product;
 import org.dars.ekart.dto.Vendor;
 import org.dars.ekart.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,15 @@ public class VendorController {
 			session.setAttribute("failure", "Invalid Session, Login Again");
 			return "redirect:/vendor/login";
 		}
+	}
+
+	@GetMapping("/add-product")
+	public String loadAddProduct(Product product, HttpSession session, ModelMap map) {
+		return vendorService.loadAddProduct(product,session,map);
+	}
+
+	@PostMapping("/add-product")
+	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) {
+		return vendorService.addProduct(product, result, session);
 	}
 }
