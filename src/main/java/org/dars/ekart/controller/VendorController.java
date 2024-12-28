@@ -1,5 +1,7 @@
 package org.dars.ekart.controller;
 
+import java.io.IOException;
+
 import org.dars.ekart.dto.Product;
 import org.dars.ekart.dto.Vendor;
 import org.dars.ekart.service.VendorService;
@@ -71,11 +73,12 @@ public class VendorController {
 
 	@GetMapping("/add-product")
 	public String loadAddProduct(Product product, HttpSession session, ModelMap map) {
-		return vendorService.loadAddProduct(product,session,map);
+		return vendorService.loadAddProduct(product, session, map);
 	}
 
 	@PostMapping("/add-product")
-	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) {
+	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) throws IOException {
 		return vendorService.addProduct(product, result, session);
 	}
+
 }

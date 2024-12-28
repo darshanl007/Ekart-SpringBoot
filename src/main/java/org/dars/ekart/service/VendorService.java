@@ -1,10 +1,12 @@
 package org.dars.ekart.service;
 
+import java.io.IOException;
 import java.util.Random;
 
 import org.dars.ekart.dto.Product;
 import org.dars.ekart.dto.Vendor;
 import org.dars.ekart.helper.AES;
+import org.dars.ekart.helper.CloudinaryHelper;
 import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.ProductRepository;
 import org.dars.ekart.repository.VendorRepository;
@@ -27,6 +29,9 @@ public class VendorService {
 
 	@Autowired
 	EmailSender emailSender;
+
+	@Autowired
+	CloudinaryHelper cloudinaryHelper;
 
 	public String loadRegister(Vendor vendor, ModelMap map) {
 		map.put("vendor", vendor);
@@ -122,13 +127,14 @@ public class VendorService {
 		}
 	}
 
-	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) {
+	public String addProduct(@Valid Product product, BindingResult result, HttpSession session) throws IOException {
 		if (session.getAttribute("vendor") != null) {
 			if (result.hasErrors()) {
 				return "add-product.html";
 			} else {
 				Vendor vendor = (Vendor) session.getAttribute("vendor");
 				product.setVendor(vendor);
+				product.setImageLink(cloudinaryHelper.saveToCloudinary(product.getImage()));
 				productRepository.save(product);
 				session.setAttribute("success", "Product Added Success");
 				return "redirect:/vendor/home";

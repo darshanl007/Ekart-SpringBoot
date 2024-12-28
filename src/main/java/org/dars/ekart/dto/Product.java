@@ -1,7 +1,5 @@
 package org.dars.ekart.dto;
 
-import org.hibernate.annotations.Comment;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.Entity;
