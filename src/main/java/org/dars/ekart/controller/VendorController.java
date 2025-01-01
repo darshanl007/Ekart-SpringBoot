@@ -81,4 +81,10 @@ public class VendorController {
 		return vendorService.addProduct(product, result, session);
 	}
 
+	@GetMapping("/manage-products")
+	public String manageProducts(HttpSession session, ModelMap map) {
+		return vendorService.manageProducts(session, map);
+
+	}
+
 }

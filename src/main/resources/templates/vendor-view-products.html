@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vendor - view products</title>
+</head>
+<body>
+	<div align="center">
+		<h2>Products</h2>
+		<table border="1">
+			<tr>
+				<th>Name</th>
+				<th>Image</th>
+				<th>Description</th>
+				<th>Stock</th>
+				<th>Price</th>
+				<th>Category</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+
+			<tr th:each="product:${products}">
+				<th th:text="${product.name}"></th>
+				<th><img height="120px" width="120px"
+					th:src="${product.imageLink}"></th>
+				<th th:text="${product.description}"></th>
+				<th th:text="${product.stock}"></th>
+				<th th:text="${product.price}"></th>
+				<th th:text="${product.category}"></th>
+				<th><button>Edit</button></th>
+				<th><button>Delete</button></th>
+			</tr>
+		</table>
+		<br> <a href="/vendor/home"><button>Back</button></a>
+	</div>
+</body>
+</html>

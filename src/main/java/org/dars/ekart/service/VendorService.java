@@ -1,6 +1,7 @@
 package org.dars.ekart.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import org.dars.ekart.dto.Product;
@@ -141,6 +142,23 @@ public class VendorService {
 			}
 		} else {
 			session.setAttribute("faliure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
+		}
+	}
+
+	public String manageProducts(HttpSession session, ModelMap map) {
+		if (session.getAttribute("vendor") != null) {
+			Vendor vendor = (Vendor) session.getAttribute("vendor");
+			List<Product> products = productRepository.findByVendor(vendor);
+			if (products.isEmpty()) {
+				session.setAttribute("failure", "No Products Present");
+				return "redirect:/vendor/home";
+			} else {
+				map.put("products", products);
+				return "vendor-view-products.html";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
 			return "redirect:/vendor/login";
 		}
 	}
