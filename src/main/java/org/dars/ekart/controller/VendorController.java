@@ -87,4 +87,9 @@ public class VendorController {
 
 	}
 
+	@GetMapping("/delete/{id}")
+	public String deleteProduct(@PathVariable int id, HttpSession session) {
+		return vendorService.deleteProduct(id, session);
+	}
+
 }

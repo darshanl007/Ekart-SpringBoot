@@ -163,4 +163,15 @@ public class VendorService {
 		}
 	}
 
+	public String deleteProduct(int id, HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			productRepository.deleteById(id);
+			session.setAttribute("success", "Product Deleted Success");
+			return "redirect:/vendor/manage-products";
+		} else {
+			session.setAttribute("failure", "Invalid Session , Login Again");
+			return "redirect:/vendor/home";
+		}
+	}
+
 }

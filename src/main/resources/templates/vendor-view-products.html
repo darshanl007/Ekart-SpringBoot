@@ -7,6 +7,11 @@
 </head>
 <body>
 	<div align="center">
+		<div>
+			<h3 style="color: green;" th:text="${session.success}"></h3>
+			<h3 style="color: red;" th:text="${session.failure}"></h3>
+			<th:block th:text="${@messageRemover.remove()}"></th:block>
+		</div>
 		<h2>Products</h2>
 		<table border="1">
 			<tr>
@@ -26,10 +31,10 @@
 					th:src="${product.imageLink}"></th>
 				<th th:text="${product.description}"></th>
 				<th th:text="${product.stock}"></th>
-				<th th:text="${product.price}"></th>
+				<th th:text="${'₹'+product.price}"></th>
 				<th th:text="${product.category}"></th>
 				<th><button>Edit</button></th>
-				<th><button>Delete</button></th>
+				<th><a th:href="'/vendor/delete/'+${product.id}"><button>Delete</button></a></th>
 			</tr>
 		</table>
 		<br> <a href="/vendor/home"><button>Back</button></a>
