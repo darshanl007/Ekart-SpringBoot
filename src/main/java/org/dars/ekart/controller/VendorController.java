@@ -103,4 +103,10 @@ public class VendorController {
 		return vendorService.updateProduct(product, session);
 	}
 
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("vendor");
+		session.setAttribute("success", "Logged out Success");
+		return "redirect:/";
+	}
 }
