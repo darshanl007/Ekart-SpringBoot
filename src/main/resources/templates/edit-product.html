@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vendor - Edit Product</title>
+</head>
+<body>
+	<div align="center">
+		<h2>EDIT PRODUCT</h2>
+		<form action="/vendor/edit-product"
+						method="post"
+						enctype="multipart/form-data"
+						th:object="${product}">
+			  <input type="hidden" name="id" th:value="*{id}">
+		Name: <input type="text" name="name" th:value="*{name}"> <span th:errors="*{name}"></span> <br> <br>
+		Price: <input type="number" name="price" th:value="*{price}"><span th:errors="*{price}"></span> <br> <br>
+		Stock: <input type="number" name="stock" th:value="*{stock}"><span th:errors="*{stock}"></span> <br> <br>
+		Description: <textarea rows="5" cols="30" name="description" th:value="*{description}"></textarea><span th:errors="*{description}"></span><br><br>
+		Image: <input type="file" name="image" required="required"> <img th:alt="*{name}" th:src="*{imageLink}" height="100px" width="100px"><br> <br> 
+		Category: <select name="category" th:value="*{category}">
+						<option selected="selected" disabled="disabled">select one option</option>
+						<option>Electronics</option>
+						<option>Fashion</option>
+						<option>Cosmetic</option>
+						<option>Toys</option>	
+				  </select><span th:errors="*{category}"></span><br><br>
+				  <button type="submit">Update</button>
+	</form>
+	</div>
+</body>
+</html>

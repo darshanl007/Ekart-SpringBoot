@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -90,6 +91,16 @@ public class VendorController {
 	@GetMapping("/delete/{id}")
 	public String deleteProduct(@PathVariable int id, HttpSession session) {
 		return vendorService.deleteProduct(id, session);
+	}
+
+	@GetMapping("/edit-product/{id}")
+	public String editProduct(@PathVariable int id, ModelMap map, HttpSession session) {
+		return vendorService.editProduct(id, map, session);
+	}
+
+	@PostMapping("/edit-product")
+	public String updateProduct(@Valid Product product, HttpSession session) throws IOException {
+		return vendorService.updateProduct(product, session);
 	}
 
 }

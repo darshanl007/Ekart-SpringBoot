@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -170,7 +171,32 @@ public class VendorService {
 			return "redirect:/vendor/manage-products";
 		} else {
 			session.setAttribute("failure", "Invalid Session , Login Again");
-			return "redirect:/vendor/home";
+			return "redirect:/vendor/login";
+		}
+	}
+
+	public String editProduct(int id, ModelMap map, HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			Product product = productRepository.findById(id).orElseThrow();
+			map.put("product", product);
+			return "edit-product.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
+		}
+	}
+
+	public String updateProduct(@Valid Product product, HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			Vendor vendor = (Vendor) session.getAttribute("vendor");
+			product.setImageLink(cloudinaryHelper.saveToCloudinary(product.getImage()));
+			product.setVendor(vendor);
+			productRepository.save(product);
+			session.setAttribute("success", "Product Updated Success");
+			return "redirect:/vendor/manage-products";
+		} else {
+			session.setAttribute("failure", "Invalid Session, First Login");
+			return "redirect:/vendor/login";
 		}
 	}
 

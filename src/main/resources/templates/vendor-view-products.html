@@ -33,7 +33,7 @@
 				<th th:text="${product.stock}"></th>
 				<th th:text="${'₹'+product.price}"></th>
 				<th th:text="${product.category}"></th>
-				<th><button>Edit</button></th>
+				<th><a th:href="'/vendor/edit-product/'+${product.id}"><button>Edit</button></a></th>
 				<th><a th:href="'/vendor/delete/'+${product.id}"><button>Delete</button></a></th>
 			</tr>
 		</table>
