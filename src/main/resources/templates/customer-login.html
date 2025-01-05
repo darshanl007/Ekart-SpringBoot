@@ -1,0 +1,23 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer - Login</title>
+</head>
+<body>
+	<div align="center">
+		<div>
+			<h3 style="color: green;" th:text="${session.success}"></h3>
+			<h3 style="color: red;" th:text="${session.failure}"></h3>
+			<th:block th:text="${@messageRemover.remove()}"></th:block>
+		</div>
+		<h2>Customer Login Page</h2>
+		<form action="/customer/login" method="post">
+			Email:<input type="text" name="email" id="email"><br> <br>
+			Password:<input type="text" name="password" id="password"><br>
+			<br>
+			<button>Login</button>
+		</form>
+		Don't have an account? <a href="/customer/register">Register Here</a>
+	</div>
+</body>
+</html>

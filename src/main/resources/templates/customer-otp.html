@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vendor - OTP</title>
+<title>Customer - OTP</title>
 </head>
 <body>
 	<div align="center">
@@ -12,8 +12,8 @@
 			<th:block th:text="${@messageRemover.remove()}"></th:block>
 		</div>
 
-		<h2>Vendor OTP Verification</h2>
-		<form action="/vendor/otp" method="post">
+		<h2>Customer OTP Verification</h2>
+		<form action="/customer/otp" method="post">
 			<input type="hidden" name="id" th:value="${id}">
 			<div>
 				<label for="otp">Enter OTP:</label> 
@@ -21,7 +21,7 @@
 			</div>
 			<br>
 			<button>Submit</button>  
-			<a th:href="'/vendor/resend-otp/'+${id}">Resend-Otp</a>
+			<a th:href="'/customer/resend-otp/'+${id}">Resend-Otp</a>
 		</form>
 	</div>
 </body>
