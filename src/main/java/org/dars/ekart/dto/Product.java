@@ -39,6 +39,7 @@ public class Product {
 	private String category;
 	@Transient
 	private MultipartFile image;
+	private boolean approved;
 
 	@ManyToOne
 	Vendor vendor;
