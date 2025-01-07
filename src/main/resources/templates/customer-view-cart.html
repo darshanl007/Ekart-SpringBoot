@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer - View Cart</title>
+</head>
+
+<body>
+
+	<div align="center">
+		<div>
+			<h3 style="color: green;" th:text="${session.success}"></h3>
+			<h3 style="color: red;" th:text="${session.failure}"></h3>
+			<th:block th:text="${@messageRemover.remove()}"></th:block>
+		</div>
+		<h2>Customer Cart</h2>
+		<table border="1" cellspacing="0" cellpadding="10">
+			<thead>
+				<tr>
+					<th>Image</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Price</th>
+					<th>Category</th>
+					<th>Quantity</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="product : ${items}">
+					<td><img th:src="${product.imageLink}" alt="Product Image"
+						width="100"></td>
+					<td th:text="${product.name}"></td>
+					<td th:text="${product.description}"></td>
+					<td th:text="'₹ '+${product.price}"></td>
+					<td th:text="${product.category}"></td>
+					<td><a href="/decrease">-</a> <span th:text="${product.quantity}"></span> <a href="/increase">+</a></td>
+					<td><a><button>Remove</button></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div>
+			<h3>
+				Total: ₹ <span th:text="${totalPrice}"></span> 
+			</h3>
+			<button>Pay</button>
+		</div>
+		<br>
+		<div>
+			<a href="/customer/home"><button>Back To Dashboard</button></a>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -12,7 +12,7 @@
 			<th:block th:text="${@messageRemover.remove()}"></th:block>
 		</div>
 		<h2>Customer View Products</h2>
-		<table border="1">
+		<table border="1" cellspacing="0" cellpadding="10">
 			<tr>
 				<th>Name</th>
 				<th>Image</th>
@@ -31,7 +31,7 @@
 				<th th:text="${product.stock}"></th>
 				<th th:text="${'₹'+product.price}"></th>
 				<th th:text="${product.category}"></th>
-				<th><a><button>Add To Cart</button></a></th>
+				<th><a th:href="'/customer/add-cart/'+${product.id}"><button>Add To Cart</button></a></th>
 			</tr>
 		</table>
 		<br> <a href="/customer/home"><button>Back To
