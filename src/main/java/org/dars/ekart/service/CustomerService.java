@@ -1,11 +1,14 @@
 package org.dars.ekart.service;
 
+import java.util.List;
 import java.util.Random;
 
 import org.dars.ekart.dto.Customer;
+import org.dars.ekart.dto.Product;
 import org.dars.ekart.helper.AES;
 import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.CustomerRepository;
+import org.dars.ekart.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -19,6 +22,9 @@ public class CustomerService {
 
 	@Autowired
 	CustomerRepository customerRepository;
+
+	@Autowired
+	ProductRepository productRepository;
 
 	@Autowired
 	EmailSender emailSender;
@@ -101,4 +107,19 @@ public class CustomerService {
 		}
 	}
 
+	public String viewProducts(HttpSession session, ModelMap map) {
+		if (session.getAttribute("customer") != null) {
+			List<Product> products = productRepository.findByApprovedTrue();
+			if (products.isEmpty()) {
+				session.setAttribute("failure", "No Products Present");
+				return "redirect:/customer/home";
+			} else {
+				map.put("products", products);
+				return "customer-view-products.html";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, First Login");
+			return "redirect:/customer/login";
+		}
+	}
 }

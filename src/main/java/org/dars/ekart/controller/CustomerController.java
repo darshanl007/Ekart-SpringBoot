@@ -1,7 +1,11 @@
 package org.dars.ekart.controller;
 
+import java.util.List;
+
 import org.dars.ekart.dto.Customer;
+import org.dars.ekart.dto.Product;
 import org.dars.ekart.dto.Vendor;
+import org.dars.ekart.repository.ProductRepository;
 import org.dars.ekart.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -74,5 +78,10 @@ public class CustomerController {
 		session.removeAttribute("customer");
 		session.setAttribute("success", "Logged Out Success");
 		return "redirect:/";
+	}
+
+	@GetMapping("/view-products")
+	public String viewProducts(HttpSession session, ModelMap map) {
+		return customerService.viewProducts(session, map);
 	}
 }
