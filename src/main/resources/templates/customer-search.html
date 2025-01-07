@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer - Search Products</title>
+</head>
+
+<body>
+	<div align="center">
+		<h2>Customer Search Products</h2>
+		<section>
+			<form action="/customer/search-products" method="post"
+				style="text-align: center; margin-top: 20px;">
+				<input type="text" name="query" placeholder="Enter Name or Category">
+				<button type="submit">Search</button>
+			</form>
+		</section>
+
+		<!-- Products Table -->
+		<section>
+			<div th:if="${query}">
+				<h2 style="text-align: center; margin-top: 20px;">Search
+					Results</h2>
+				<table border="1">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Image</th>
+							<th>Description</th>
+							<th>Stock</th>
+							<th>Price</th>
+							<th>Category</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="product : ${products}">
+							<td th:text="${product.name}"></td>
+							<td><img th:src="${product.imageLink}" alt="Product Image"
+								style="width: 120px; height: auto;"></td>
+							<td th:text="${product.description}"></td>
+							<td th:text="${product.stock} + ' Units'"></td>
+							<td th:text="${product.price}"></td>
+							<td th:text="${product.category}"></td>
+							<td><a><button>Add to Cart</button></a></td>
+						</tr>
+					</tbody>
+				</table>
+				<div th:if="${#lists.isEmpty(products)}">
+					<h3 style="color: red;">No products found.</h3>
+				</div>
+			</div>
+		</section>
+		<br> <a href="/customer/home"><button>Back To
+				Dashboard</button></a>
+	</div>
+</body>
+
+</html>

@@ -1,11 +1,6 @@
 package org.dars.ekart.controller;
 
-import java.util.List;
-
 import org.dars.ekart.dto.Customer;
-import org.dars.ekart.dto.Product;
-import org.dars.ekart.dto.Vendor;
-import org.dars.ekart.repository.ProductRepository;
 import org.dars.ekart.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -83,5 +78,15 @@ public class CustomerController {
 	@GetMapping("/view-products")
 	public String viewProducts(HttpSession session, ModelMap map) {
 		return customerService.viewProducts(session, map);
+	}
+
+	@GetMapping("/search-products")
+	public String search(HttpSession session) {
+		return customerService.search(session);
+	}
+
+	@PostMapping("/search-products")
+	public String search(@RequestParam String query, HttpSession session, ModelMap map) {
+		return customerService.search(query, session, map);
 	}
 }

@@ -12,4 +12,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	List<Product> findByApprovedTrue();
 
+	List<Product> findByNameLike(String toSearch);
+
+	List<Product> findByDescriptionLike(String toSearch);
+
+	List<Product> findByCategoryLike(String toSearch);
+
 }

@@ -1,5 +1,6 @@
 package org.dars.ekart.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -122,4 +123,33 @@ public class CustomerService {
 			return "redirect:/customer/login";
 		}
 	}
+
+	public String search(HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			return "customer-search.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, First Login");
+			return "redirect:/customer/login";
+		}
+	}
+
+	public String search(String query, HttpSession session, ModelMap map) {
+		if (session.getAttribute("customer") != null) {
+			String toSearch = "%" + query + "%";
+			List<Product> list1 = productRepository.findByNameLike(toSearch);
+			List<Product> list2 = productRepository.findByDescriptionLike(toSearch);
+			List<Product> list3 = productRepository.findByCategoryLike(toSearch);
+			HashSet<Product> products = new HashSet<Product>();
+			products.addAll(list1);
+			products.addAll(list2);
+			products.addAll(list3);
+			map.put("products", products);
+			map.put("query", query);
+			return "customer-search.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
 }
