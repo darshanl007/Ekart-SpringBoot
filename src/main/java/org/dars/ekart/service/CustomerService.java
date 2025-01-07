@@ -271,4 +271,20 @@ public class CustomerService {
 		}
 	}
 
+	public String removeFromCart(int id, HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			Customer customer = (Customer) session.getAttribute("customer");
+			Item item = itemRepository.findById(id).get();
+			Product product = productRepository.findByNameLike(item.getName()).get(0);
+			customer.getCart().getItems().remove(item);
+			customerRepository.save(customer);
+			session.setAttribute("success", "Product Removed From Cart Success");
+			session.setAttribute("customer", customerRepository.findById(customer.getId()).get());
+			return "redirect:/customer/view-cart";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
 }

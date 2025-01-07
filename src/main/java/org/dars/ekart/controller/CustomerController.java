@@ -109,5 +109,9 @@ public class CustomerController {
 	public String decrease(@PathVariable int id, HttpSession session) {
 		return customerService.decrease(id, session);
 	}
-	
+
+	@GetMapping("/remove/{id}")
+	public String removeFromCart(@PathVariable int id, HttpSession session) {
+		return customerService.removeFromCart(id, session);
+	}
 }

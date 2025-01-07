@@ -39,7 +39,7 @@
 					<td><a th:href="'/customer/decrease/'+${product.id}"><button>-</button></a>
 						<span th:text="${product.quantity}"></span> 
 						<a th:href="'/customer/increase/'+${product.id}"><button>+</button></a></td>
-					<td><a><button>Remove</button></a></td>
+					<td><a th:href="'/customer/remove/'+${product.id}"><button>Remove</button></a></td>
 				</tr>
 			</tbody>
 		</table>
