@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer - View Products</title>
+</head>
+<body>
+	<div align="center">
+		<div>
+			<h3 style="color: green;" th:text="${session.success}"></h3>
+			<h3 style="color: red;" th:text="${session.failure}"></h3>
+			<th:block th:text="${@messageRemover.remove()}"></th:block>
+		</div>
+		<h2>Customer View Products</h2>
+		<table border="1">
+			<tr>
+				<th>Name</th>
+				<th>Image</th>
+				<th>Description</th>
+				<th>Stock</th>
+				<th>Price</th>
+				<th>Category</th>
+				<th>Action</th>
+			</tr>
+
+			<tr th:each="product:${products}">
+				<th th:text="${product.name}"></th>
+				<th><img height="120px" width="120px"
+					th:src="${product.imageLink}"></th>
+				<th th:text="${product.description}"></th>
+				<th th:text="${product.stock}"></th>
+				<th th:text="${'₹'+product.price}"></th>
+				<th th:text="${product.category}"></th>
+				<th><a><button>Add To Cart</button></a></th>
+			</tr>
+		</table>
+		<br> <a href="/customer/home"><button>Back To
+				Dashboard</button></a>
+</body>
+</html>
