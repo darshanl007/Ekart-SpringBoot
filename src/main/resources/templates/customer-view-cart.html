@@ -36,7 +36,9 @@
 					<td th:text="${product.description}"></td>
 					<td th:text="'₹ '+${product.price}"></td>
 					<td th:text="${product.category}"></td>
-					<td><a href="/decrease">-</a> <span th:text="${product.quantity}"></span> <a href="/increase">+</a></td>
+					<td><a th:href="'/customer/decrease/'+${product.id}"><button>-</button></a>
+						<span th:text="${product.quantity}"></span> 
+						<a th:href="'/customer/increase/'+${product.id}"><button>+</button></a></td>
 					<td><a><button>Remove</button></a></td>
 				</tr>
 			</tbody>
@@ -44,7 +46,7 @@
 
 		<div>
 			<h3>
-				Total: ₹ <span th:text="${totalPrice}"></span> 
+				Total: ₹ <span th:text="${totalPrice}"></span>
 			</h3>
 			<button>Pay</button>
 		</div>

@@ -12,6 +12,7 @@ import org.dars.ekart.dto.Product;
 import org.dars.ekart.helper.AES;
 import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.CustomerRepository;
+import org.dars.ekart.repository.ItemRepository;
 import org.dars.ekart.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class CustomerService {
 
 	@Autowired
 	ProductRepository productRepository;
+
+	@Autowired
+	ItemRepository itemRepository;
 
 	@Autowired
 	EmailSender emailSender;
@@ -213,4 +217,58 @@ public class CustomerService {
 			return "redirect:/customer/login";
 		}
 	}
+
+	public String increase(int id, HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			Customer customer = (Customer) session.getAttribute("customer");
+			Item item = itemRepository.findById(id).get();
+			Product product = productRepository.findByNameLike(item.getName()).get(0);
+
+			if (product.getStock() == 0) {
+				session.setAttribute("failure", "Sorry! Product Out of Stock");
+				return "redirect:/customer/view-cart";
+			} else {
+				item.setQuantity(item.getQuantity() + 1);
+				item.setPrice(item.getPrice() + product.getPrice());
+				itemRepository.save(item);
+				product.setStock(product.getStock() - 1);
+				productRepository.save(product);
+				session.setAttribute("success", "Product Added to Cart Success");
+				session.setAttribute("customer", customerRepository.findById(customer.getId()).get());
+				return "redirect:/customer/view-cart";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
+	public String decrease(int id, HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			Customer customer = (Customer) session.getAttribute("customer");
+			Item item = itemRepository.findById(id).get();
+			Product product = productRepository.findByNameLike(item.getName()).get(0);
+
+			if (item.getQuantity() > 1) {
+				item.setQuantity(item.getQuantity() - 1);
+				item.setPrice(item.getPrice() - product.getPrice());
+				itemRepository.save(item);
+				product.setStock(product.getStock() + 1);
+				productRepository.save(product);
+				session.setAttribute("success", "Product Removed From Cart Success");
+				session.setAttribute("customer", customerRepository.findById(customer.getId()).get());
+				return "redirect:/customer/view-cart";
+			} else {
+				customer.getCart().getItems().remove(item);
+				customerRepository.save(customer);
+				session.setAttribute("success", "Product Quantity Reduced From Cart Success");
+				session.setAttribute("customer", customerRepository.findById(customer.getId()).get());
+				return "redirect:/customer/view-cart";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
 }

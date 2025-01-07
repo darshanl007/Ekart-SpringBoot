@@ -99,4 +99,15 @@ public class CustomerController {
 	public String addToCart(@PathVariable int id, HttpSession session) {
 		return customerService.addToCart(id, session);
 	}
+
+	@GetMapping("/increase/{id}")
+	public String increase(@PathVariable int id, HttpSession session) {
+		return customerService.increase(id, session);
+	}
+
+	@GetMapping("/decrease/{id}")
+	public String decrease(@PathVariable int id, HttpSession session) {
+		return customerService.decrease(id, session);
+	}
+	
 }
