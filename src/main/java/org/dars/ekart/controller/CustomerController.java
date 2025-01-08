@@ -1,7 +1,9 @@
 package org.dars.ekart.controller;
 
 import org.dars.ekart.dto.Customer;
+import org.dars.ekart.dto.Order;
 import org.dars.ekart.service.CustomerService;
+import org.json.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -113,5 +115,15 @@ public class CustomerController {
 	@GetMapping("/remove/{id}")
 	public String removeFromCart(@PathVariable int id, HttpSession session) {
 		return customerService.removeFromCart(id, session);
+	}
+
+	@GetMapping("/payment")
+	public String payment(HttpSession session, ModelMap map) {
+		return customerService.payment(session, map);
+	}
+
+	@PostMapping("/success")
+	public String paymnetSuccess(Order order, HttpSession session) {
+		return customerService.paymentSuccess(order, session);
 	}
 }

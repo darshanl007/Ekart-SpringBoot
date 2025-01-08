@@ -13,12 +13,19 @@ import org.dars.ekart.helper.AES;
 import org.dars.ekart.helper.EmailSender;
 import org.dars.ekart.repository.CustomerRepository;
 import org.dars.ekart.repository.ItemRepository;
+import org.dars.ekart.repository.OrderRepository;
 import org.dars.ekart.repository.ProductRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -34,6 +41,9 @@ public class CustomerService {
 
 	@Autowired
 	ItemRepository itemRepository;
+
+	@Autowired
+	OrderRepository orderRepository;
 
 	@Autowired
 	EmailSender emailSender;
@@ -287,4 +297,70 @@ public class CustomerService {
 		}
 	}
 
+	public String payment(HttpSession session, ModelMap map) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (session.getAttribute("customer") != null) {
+
+			try {
+
+				double amount = customer.getCart().getItems().stream().mapToDouble(i -> i.getPrice()).sum();
+
+				RazorpayClient razorpayClient = new RazorpayClient("rzp_test_zH7QtiK5JnMMiw",
+						"HWQWwpKQbK5XdLZEUTqnGQVC");
+
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("currency", "INR");
+				jsonObject.put("amount", amount * 100);
+
+				Order order = razorpayClient.orders.create(jsonObject);
+				map.put("key", "rzp_test_zH7QtiK5JnMMiw");
+				map.put("id", order.get("id"));
+				map.put("amount", amount * 100);
+				map.put("customer", customer);
+
+				return "payment.html";
+
+			} catch (RazorpayException e) {
+				session.setAttribute("failure", "Invalid Session, Login Again");
+				return "redirect:/customer/login";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
+	public String paymentSuccess(org.dars.ekart.dto.Order order, HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			Customer customer = (Customer) session.getAttribute("customer");
+			order.setCustomer(customer);
+			order.setTotalPrice(customer.getCart().getItems().stream().mapToDouble(i -> i.getPrice()).sum());
+			List<Item> items = customer.getCart().getItems();
+			System.out.println(items.size());
+
+			List<Item> orderItems = order.getItems();
+			for (Item item : items) {
+				Item item2 = new Item();
+				item2.setCategory(item.getCategory());
+				item2.setDescription(item.getDescription());
+				item2.setImageLink(item.getImageLink());
+				item2.setName(item.getName());
+				item2.setPrice(item.getPrice());
+				item2.setQuantity(item.getQuantity());
+				orderItems.add(item2);
+			}
+			order.setItems(orderItems);
+			orderRepository.save(order);
+
+			customer.getCart().getItems().clear();
+			customerRepository.save(customer);
+
+			session.setAttribute("customer", customerRepository.findById(customer.getId()).get());
+			session.setAttribute("success", "Order Placed Success");
+			return "redirect:/customer/home";
+		} else {
+			session.setAttribute("failure", "Invalid Session, First Login");
+			return "redirect:/customer/login";
+		}
+	}
 }
