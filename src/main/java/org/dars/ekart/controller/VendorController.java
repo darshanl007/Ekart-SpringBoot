@@ -64,12 +64,7 @@ public class VendorController {
 
 	@GetMapping("/home")
 	public String loadHome(HttpSession session) {
-		if (session.getAttribute("vendor") != null) {
-			return "vendor-home.html";
-		} else {
-			session.setAttribute("failure", "Invalid Session, Login Again");
-			return "redirect:/vendor/login";
-		}
+		return vendorService.loadHome(session);
 	}
 
 	@GetMapping("/add-product")
@@ -105,8 +100,6 @@ public class VendorController {
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("vendor");
-		session.setAttribute("success", "Logged out Success");
-		return "redirect:/";
+		return vendorService.logout(session);
 	}
 }

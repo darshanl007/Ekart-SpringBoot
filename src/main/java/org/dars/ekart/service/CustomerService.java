@@ -126,6 +126,21 @@ public class CustomerService {
 		}
 	}
 
+	public String loadHome(HttpSession session) {
+		if (session.getAttribute("customer") != null) {
+			return "customer-home.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
+
+	public String logout(HttpSession session) {
+		session.removeAttribute("customer");
+		session.setAttribute("success", "Logged Out Success");
+		return "redirect:/";
+	}
+
 	public String viewProducts(HttpSession session, ModelMap map) {
 		if (session.getAttribute("customer") != null) {
 			List<Product> products = productRepository.findByApprovedTrue();

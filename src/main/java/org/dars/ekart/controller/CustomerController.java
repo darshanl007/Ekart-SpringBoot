@@ -62,19 +62,12 @@ public class CustomerController {
 
 	@GetMapping("/home")
 	public String loadHome(HttpSession session) {
-		if (session.getAttribute("customer") != null) {
-			return "customer-home.html";
-		} else {
-			session.setAttribute("failure", "Invalid Session, Login Again");
-			return "redirect:/customer/login";
-		}
+		return customerService.loadHome(session);
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("customer");
-		session.setAttribute("success", "Logged Out Success");
-		return "redirect:/";
+		return customerService.logout(session);
 	}
 
 	@GetMapping("/view-products")

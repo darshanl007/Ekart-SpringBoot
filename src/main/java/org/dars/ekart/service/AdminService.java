@@ -1,4 +1,4 @@
-package org.dars.ekart.controller;
+package org.dars.ekart.service;
 
 import java.util.List;
 
@@ -6,17 +6,15 @@ import org.dars.ekart.dto.Product;
 import org.dars.ekart.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 
-@Controller
-public class MainController {
+@Service
+public class AdminService {
 
 	@Value("${admin.email}")
 	String adminEmail;
@@ -27,17 +25,6 @@ public class MainController {
 	@Autowired
 	ProductRepository productRepository;
 
-	@GetMapping("/")
-	public String loadHome() {
-		return "home.html";
-	}
-
-	@GetMapping("/admin/login")
-	public String loadAdminLogin() {
-		return "admin-login.html";
-	}
-
-	@PostMapping("/admin/login")
 	public String adminLogin(@RequestParam String email, @RequestParam String password, HttpSession session) {
 		if (email.equals(adminEmail)) {
 			if (password.equals(adminPassword)) {
@@ -54,7 +41,6 @@ public class MainController {
 		}
 	}
 
-	@GetMapping("/admin/home")
 	public String loadAdminHome(HttpSession session) {
 		if (session.getAttribute("admin") != null) {
 			return "admin-home.html";
@@ -64,14 +50,12 @@ public class MainController {
 		}
 	}
 
-	@GetMapping("/admin/logout")
 	public String adminLogout(HttpSession session) {
 		session.removeAttribute("admin");
 		session.setAttribute("success", "Logged out Success");
 		return "redirect:/";
 	}
 
-	@GetMapping("/admin/approve-products")
 	public String approveProducts(HttpSession session, ModelMap map) {
 		if (session.getAttribute("admin") != null) {
 			List<Product> products = productRepository.findAll();
@@ -88,7 +72,6 @@ public class MainController {
 		}
 	}
 
-	@GetMapping("/admin/changes/{id}")
 	public String changeStatus(@PathVariable int id, HttpSession session) {
 		if (session.getAttribute("admin") != null) {
 			Product product = productRepository.findById(id).get();
@@ -105,4 +88,5 @@ public class MainController {
 			return "redirect:/admin/login";
 		}
 	}
+
 }

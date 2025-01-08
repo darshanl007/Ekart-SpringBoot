@@ -119,6 +119,15 @@ public class VendorService {
 		}
 	}
 
+	public String loadHome(HttpSession session) {
+		if (session.getAttribute("vendor") != null) {
+			return "vendor-home.html";
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/vendor/login";
+		}
+	}
+
 	public String loadAddProduct(Product product, HttpSession session, ModelMap map) {
 		if (session.getAttribute("vendor") != null) {
 			map.put("product", product);
@@ -198,6 +207,12 @@ public class VendorService {
 			session.setAttribute("failure", "Invalid Session, First Login");
 			return "redirect:/vendor/login";
 		}
+	}
+
+	public String logout(HttpSession session) {
+		session.removeAttribute("vendor");
+		session.setAttribute("success", "Logged out Success");
+		return "redirect:/";
 	}
 
 }
