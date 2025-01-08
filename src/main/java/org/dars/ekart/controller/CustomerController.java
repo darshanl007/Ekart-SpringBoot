@@ -126,4 +126,9 @@ public class CustomerController {
 	public String paymnetSuccess(Order order, HttpSession session) {
 		return customerService.paymentSuccess(order, session);
 	}
+
+	@GetMapping("/view-orders")
+	public String viewOrders(HttpSession session, ModelMap map) {
+		return customerService.viewOrders(session, map);
+	}
 }

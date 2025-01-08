@@ -363,4 +363,21 @@ public class CustomerService {
 			return "redirect:/customer/login";
 		}
 	}
+
+	public String viewOrders(HttpSession session, ModelMap map) {
+		if (session.getAttribute("customer") != null) {
+			Customer customer = (Customer) session.getAttribute("customer");
+			List<org.dars.ekart.dto.Order> orders = orderRepository.findByCustomer(customer);
+			if (orders.isEmpty()) {
+				session.setAttribute("failure", "No Orders Placed Yet");
+				return "redirect:/customer/home";
+			} else {
+				map.put("orders", orders);
+				return "customer-view-orders.html";
+			}
+		} else {
+			session.setAttribute("failure", "Invalid Session, Login Again");
+			return "redirect:/customer/login";
+		}
+	}
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer - View Orders</title>
+</head>
+<body>
+	<div align="center">
+		<h2>Customer Previous Orders</h2>
+		<table border="1" cellpadding="10" cellspacing="0"
+			style="border-collapse: collapse; width: 80%;">
+			<thead>
+				<tr>
+					<th>Order Id</th>
+					<th>Payment Id</th>
+					<th>Ordered Date</th>
+					<th>Total Price</th>
+					<th>Items</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="order:${orders}">
+					<td th:text="${order.razorpay_order_id}"></td>
+					<td th:text="${order.razorpay_payment_id}"></td>
+					<td th:text="${order.orderDate}"></td>
+					<td th:text="${order.totalPrice}"></td>
+					<td>
+						<table border="1" cellpadding="5" cellspacing="0"
+							style="border-collapse: collapse; width: 100%;">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Price</th>
+									<th>Quantity</th>
+									<th>Image</th>
+									<th>Category</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="item:${order.items}">
+									<td th:text="${item.name}"></td>
+									<td th:text="${item.price}"></td>
+									<td th:text="${item.quantity}"></td>
+									<td><img height="75px" width="75px"
+										th:src="${item.imageLink}" alt="Item Image"></td>
+									<td th:text="${item.category}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table><br>
+		<a href="/customer/home"><button>Back To Dashboard</button></a>
+	</div>
+</body>
+</html>
